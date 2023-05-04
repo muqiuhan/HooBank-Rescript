@@ -2,7 +2,7 @@
 
 # LSMDB
 
-> LSM-Tree based Key-Value Store implementation in OCaml
+> LSM-Tree based Key-Value Store implementation in Racket
 
 </div>
 
