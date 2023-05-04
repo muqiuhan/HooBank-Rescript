@@ -17,10 +17,10 @@
 
 (package
  (name lsmdb)
- (synopsis "Simple LSM-Tree database implementation")
- (description "Simple LSM-Tree database implementation")
+ (synopsis "LSM-Tree based Key-Value Store")
+ (description "LSM-Tree based Key-Value Store")
  (depends ocaml dune)
  (tags
-  (database "lsm-tree" sql)))
+  (database sql)))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
