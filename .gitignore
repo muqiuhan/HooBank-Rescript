@@ -1,4 +1,7 @@
 /.vscode
 /.idea
+/.ionide
 bin/
 obj/
+
+.fake
