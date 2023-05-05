@@ -1,10 +1,15 @@
 <div align="center">
 
-# LSMDB
+# FSMDB
 
-> LSM-Tree based Key-Value Store implementation in Racket
+> LSM-Tree based Key-Value Store implementation in F#
 
 </div>
+
+# Build and Run
+- Build: `dotnet build`
+- Run: `dotnet run --project FSMDB`
+- Test: `dotnet test`
 
 # Reference
 - Introductory tutorial to designing and building a LSM-Tree based Key-Value Store like RocksDB : [https://adambcomer.com/blog/simple-database/motivation-design/](https://adambcomer.com/blog/simple-database/motivation-design/)

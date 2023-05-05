@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LSMDB\LSMDB.fsproj"/>
+        <ProjectReference Include="..\FSMDB\FSMDB.fsproj"/>
     </ItemGroup>
 
 </Project>

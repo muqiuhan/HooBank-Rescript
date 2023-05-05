@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LSMDB", "LSMDB\LSMDB.fsproj", "{0C14E8B0-82FF-423F-A6B1-9D597D7F34C3}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSMDB", "FSMDB\FSMDB.fsproj", "{0C14E8B0-82FF-423F-A6B1-9D597D7F34C3}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LSMDB.Tests", "LSMDB.Tests\LSMDB.Tests.fsproj", "{B9F2A4A6-BE29-4741-91CF-97EC2A96BE07}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSMDB.Tests", "FSMDB.Tests\FSMDB.Tests.fsproj", "{B9F2A4A6-BE29-4741-91CF-97EC2A96BE07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
