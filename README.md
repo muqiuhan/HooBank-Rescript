@@ -1,17 +1,21 @@
 <div align="center">
 
-# FSMDB
+<img src="./.github/logo.png" height="150">
 
+FSMDB
 > LSM-Tree based Key-Value Store implementation in F#
 
 </div>
 
-# Build and Run
+This is a learning project with well-commented and readability-first code design goals, 
+After the project completes the proof-of-concept phase, it will be re-implemented using OCaml, and the OCaml version will focus on performance.
+
+## Build and Run
 - Build: `dotnet build`
 - Run: `dotnet run --project FSMDB`
 - Test: `dotnet test`
 
-# Reference
+## Reference
 - Introductory tutorial to designing and building a LSM-Tree based Key-Value Store like RocksDB : [https://adambcomer.com/blog/simple-database/motivation-design/](https://adambcomer.com/blog/simple-database/motivation-design/)
 - RocksDB: A Persistent Key-Value Store for Flash and RAM Storage : [https://github.com/facebook/rocksdb](https://github.com/facebook/rocksdb)
 - Key–value database wikipedia : [https://en.wikipedia.org/wiki/Key%E2%80%93value_database](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)
@@ -22,7 +26,7 @@
 - Rocksdb BlockBasedTable Format RocksDB wiki : [https://github.com/facebook/rocksdb/wiki/Rocksdb-BlockBasedTable-Format](https://github.com/facebook/rocksdb/wiki/Rocksdb-BlockBasedTable-Format)
 - Skip list wikipedia : [https://en.wikipedia.org/wiki/Skip_list](https://en.wikipedia.org/wiki/Skip_list)
 
-# License
+## License
 The MIT License (MIT)
 
 Copyright (c) 2022 Muqiu Han
