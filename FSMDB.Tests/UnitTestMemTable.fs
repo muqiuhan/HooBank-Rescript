@@ -1,14 +1,12 @@
-module FSMDB.Tests
+module FSMDB.Tests.MemTable
 
 open NUnit.Framework
-open MemTable
-open System
-
+open FSMDB.MemTable
 
 [<TestFixture>]
 type TestMemTable() =
     [<Test>]
-    static member public TestMemTableSet() =
+    static member public Set() =
         let table = MemTable.Create()
 
         table.Set(
@@ -27,7 +25,7 @@ type TestMemTable() =
         | Error() -> Assert.Fail()
 
     [<Test>]
-    static member public TestMemTableOverrite() =
+    static member public Overrite() =
         let table = MemTable.Create()
 
         table.Set("OCaml", "Real World OCaml 2nd")
@@ -43,7 +41,7 @@ type TestMemTable() =
         | Error() -> Assert.Fail()
 
     [<Test>]
-    static member public TestMemTableNotExists() =
+    static member public NotExists() =
         let table = MemTable.Create()
 
         table.Set("OCaml", "Real World OCaml 2nd")
@@ -54,7 +52,7 @@ type TestMemTable() =
 
 
     [<Test>]
-    static member public TestMemTableDeleteExists() =
+    static member public DeleteExists() =
         let table = MemTable.Create()
 
         table.Set("OCaml", "Real World OCaml 2nd")
@@ -69,7 +67,7 @@ type TestMemTable() =
         | Error() -> Assert.Fail()
 
     [<Test>]
-    static member public TestMemTableDeleteNotExists() =
+    static member public DeleteNotExists() =
         let table = MemTable.Create()
 
         table.Set("OCaml", "Real World OCaml 2nd") // 5 + 20 + 9
@@ -87,5 +85,5 @@ type TestMemTable() =
         | Ok(entry) ->
             Assert.AreEqual(false, entry.Deleted)
             Assert.AreEqual("OCaml", entry.Key)
-            Assert.AreEqual(Some("Real World OCaml"), entry.Value)
+            Assert.AreEqual(Some("Real World OCaml 2nd"), entry.Value)
         | Error() -> Assert.Fail()

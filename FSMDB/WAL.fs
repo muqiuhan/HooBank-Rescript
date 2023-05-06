@@ -47,9 +47,11 @@ type WALIterator(path: string) =
         use memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open, path)
         let fileView = memoryMappedFile.CreateViewAccessor()
 
-        match Utils.Numeric.checkInt64ToInt32 (fileView.Capacity) with
+        match Utils.Numeric.CheckInt64ToInt32 (fileView.Capacity) with
         | Ok(capacity) ->
-            let buffer = Array.zeroCreate (capacity)
+            let buffer = Array.zeroCreate<byte> (capacity)
             fileView.ReadArray(0, buffer, 0, capacity) |> ignore
             buffer
         | Error() -> failwith $"""WALIterator: File {path} too large"""
+
+    
