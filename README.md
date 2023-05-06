@@ -22,9 +22,10 @@ After the project completes the proof-of-concept phase, it will be re-implemente
 - The Log-Structured Merge-Tree (LSM-Tree) original paper : [https://www.cs.umb.edu/~poneil/lsmtree.pdf](https://www.cs.umb.edu/~poneil/lsmtree.pdf)
 - Log-structured merge-tree wikipedia : [https://en.wikipedia.org/wiki/Log-structured_merge-tree](https://en.wikipedia.org/wiki/Log-structured_merge-tree)
 - MemTable RocksDB wiki : [https://github.com/facebook/rocksdb/wiki/MemTable](https://github.com/facebook/rocksdb/wiki/MemTable)
-- Write AHead Log RocksDB wiki : [https://github.com/EighteenZi/rocksdb_wiki/blob/master/Write-Ahead-Log.md](https://github.com/EighteenZi/rocksdb_wiki/blob/master/Write-Ahead-Log.md)
 - Rocksdb BlockBasedTable Format RocksDB wiki : [https://github.com/facebook/rocksdb/wiki/Rocksdb-BlockBasedTable-Format](https://github.com/facebook/rocksdb/wiki/Rocksdb-BlockBasedTable-Format)
 - Skip list wikipedia : [https://en.wikipedia.org/wiki/Skip_list](https://en.wikipedia.org/wiki/Skip_list)
+- Write AHead Log RocksDB wiki : [https://github.com/EighteenZi/rocksdb_wiki/blob/master/Write-Ahead-Log.md](https://github.com/EighteenZi/rocksdb_wiki/blob/master/Write-Ahead-Log.md)
+- Write Ahead Log File Format RocksDB Wiki : [https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-File-Format#record-format](https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-File-Format#record-format)
 
 ## License
 The MIT License (MIT)
