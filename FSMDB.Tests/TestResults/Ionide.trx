@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="d6a1b652-0e58-48d3-92c2-c436e6ae3c0d" name="@localhost 2023-05-05 18:49:12" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2023-05-05T18:49:12.5953588+08:00" queuing="2023-05-05T18:49:12.5953588+08:00" start="2023-05-05T18:49:12.0827984+08:00" finish="2023-05-05T18:49:12.5958044+08:00" />
-  <TestSettings name="default" id="a1d40488-dee3-4f18-8e49-813b13419234">
-    <Deployment runDeploymentRoot="_localhost_2023-05-05_18_49_12" />
+<TestRun id="e58eec0a-96cb-46c2-b1a1-0761be20845f" name="@localhost 2023-05-05 19:16:10" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2023-05-05T19:16:10.4117633+08:00" queuing="2023-05-05T19:16:10.4117633+08:00" start="2023-05-05T19:16:09.9012763+08:00" finish="2023-05-05T19:16:10.4122557+08:00" />
+  <TestSettings name="default" id="01261fe7-0392-4459-bb3c-f98438a3a169">
+    <Deployment runDeploymentRoot="_localhost_2023-05-05_19_16_10" />
   </TestSettings>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
@@ -18,8 +18,8 @@ NUnit Adapter 4.4.0.0: Test execution complete
 </StdOut>
     </Output>
     <RunInfos>
-      <RunInfo computerName="localhost" outcome="Warning" timestamp="2023-05-05T18:49:12.5343993+08:00">
-        <Text>No test matches the given testcase filter `(FullyQualifiedName=FSMDB.Tests+TestMemTable.TestMemTablePutStart)|(FullyQualifiedName=SMDB.Tests+TestMemTable.TestMemTablePutStart)` in /home/muqiu-han/Workspace/FSMDB/FSMDB.Tests/bin/Debug/net7.0/FSMDB.Tests.dll</Text>
+      <RunInfo computerName="localhost" outcome="Warning" timestamp="2023-05-05T19:16:10.3492638+08:00">
+        <Text>No test matches the given testcase filter `(FullyQualifiedName=FSMDB.Tests+TestMemTable.TestMemTablePutStart)` in /home/muqiu-han/Workspace/FSMDB/FSMDB.Tests/bin/Debug/net7.0/FSMDB.Tests.dll</Text>
       </RunInfo>
     </RunInfos>
   </ResultSummary>

@@ -2,6 +2,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishAot>true</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
