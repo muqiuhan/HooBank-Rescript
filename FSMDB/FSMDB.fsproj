@@ -10,5 +10,6 @@
     <Compile Include="Program.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="MemTable.fs" />
+    <Compile Include="WAL.fs" />
   </ItemGroup>
 </Project>
