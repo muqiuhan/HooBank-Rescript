@@ -2,13 +2,21 @@
 
 <img src="./.github/logo.png" height="150">
 
-FsmDB
-> LSM-Tree based Key-Value Store implementation in F#
+# FsmDB
+
+*WiscKey based Key-Value Store implementation in F#*
+
+![](https://img.shields.io/badge/.NET%20Core%208.0.100~preview.7-8A2BE2)
+![](https://github.com/muqiuhan/FsmDB/actions/workflows/build.yml/badge.svg)
+
+![](https://img.shields.io/badge/work%20in%20progress-FFFF00)
 
 </div>
 
-This is a learning project with well-commented and readability-first code design goals, 
-After the project completes the proof-of-concept phase, it will be re-implemented using OCaml, and the OCaml version will focus on performance.
+## Introduction
+WiscKey is a persistent LSM-tree-based key-value store with a performance-oriented data layout that separates keys from values to minimize I/O amplifi- cation. The design of WiscKey is highly SSD optimized, leveraging both the sequential and random performance characteristics of the device. 
+
+- original paper: [https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
 
 ## Build and Run
 - Build: `dotnet build`
@@ -16,6 +24,7 @@ After the project completes the proof-of-concept phase, it will be re-implemente
 - Test: `dotnet test`
 
 ## Reference
+- WiscKey: Separating Keys from Values in SSD-Conscious Storage: [https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
 - Introductory tutorial to designing and building a LSM-Tree based Key-Value Store like RocksDB : [https://adambcomer.com/blog/simple-database/motivation-design/](https://adambcomer.com/blog/simple-database/motivation-design/)
 - RocksDB: A Persistent Key-Value Store for Flash and RAM Storage : [https://github.com/facebook/rocksdb](https://github.com/facebook/rocksdb)
 - Key–value database wikipedia : [https://en.wikipedia.org/wiki/Key%E2%80%93value_database](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)
