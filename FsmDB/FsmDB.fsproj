@@ -1,15 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishAot>true</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
-    <Compile Include="Utils.fs" />
-    <Compile Include="MemTable.fs" />
-    <Compile Include="WAL.fs" />
   </ItemGroup>
 </Project>

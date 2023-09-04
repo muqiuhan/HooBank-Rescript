@@ -12,14 +12,14 @@
     <Counters total="0" executed="0" passed="0" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>NUnit Adapter 4.4.0.0: Test execution started
-Running selected tests in /home/muqiu-han/Workspace/FSMDB/FSMDB.Tests/bin/Debug/net7.0/FSMDB.Tests.dll
+Running selected tests in /home/muqiu-han/Workspace/FsmDB/FsmDB.Tests/bin/Debug/net7.0/FsmDB.Tests.dll
    NUnit3TestExecutor discovered 0 of 0 NUnit test cases using Current Discovery mode, Explicit run
 NUnit Adapter 4.4.0.0: Test execution complete
 </StdOut>
     </Output>
     <RunInfos>
       <RunInfo computerName="localhost" outcome="Warning" timestamp="2023-05-05T19:16:10.3492638+08:00">
-        <Text>No test matches the given testcase filter `(FullyQualifiedName=FSMDB.Tests+TestMemTable.TestMemTablePutStart)` in /home/muqiu-han/Workspace/FSMDB/FSMDB.Tests/bin/Debug/net7.0/FSMDB.Tests.dll</Text>
+        <Text>No test matches the given testcase filter `(FullyQualifiedName=FsmDB.Tests+TestMemTable.TestMemTablePutStart)` in /home/muqiu-han/Workspace/FsmDB/FsmDB.Tests/bin/Debug/net7.0/FsmDB.Tests.dll</Text>
       </RunInfo>
     </RunInfos>
   </ResultSummary>

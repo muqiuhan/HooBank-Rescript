@@ -2,7 +2,7 @@
 
 <img src="./.github/logo.png" height="150">
 
-FSMDB
+FsmDB
 > LSM-Tree based Key-Value Store implementation in F#
 
 </div>
@@ -12,7 +12,7 @@ After the project completes the proof-of-concept phase, it will be re-implemente
 
 ## Build and Run
 - Build: `dotnet build`
-- Run: `dotnet run --project FSMDB`
+- Run: `dotnet run --project FsmDB`
 - Test: `dotnet test`
 
 ## Reference
