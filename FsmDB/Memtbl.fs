@@ -26,7 +26,7 @@
 module FsmDB.Memtbl
 
 open SkipList
-
+open System
 
 /// Single Record in the MemTable.
 /// Each records holds the key and the position of the record in the Value log. *)
@@ -39,6 +39,9 @@ type Record =
         value_loc: int64
     }
 
+    interface Collections.Generic.IComparer<Record> with
+        member this.Compare(x: Record, y: Record) : int = x.key.CompareTo(y)
+
     static member private Compare() = ()
 
 /// In-memory table of the database.
@@ -46,6 +49,4 @@ type Record =
 /// time, there is only one active MemTable in the database engine. The MemTable is always
 /// the first store to be searched when a key-value pair is requested. *)
 type Memtbl() =
-
-    /// SkipList of records sorted by key
-    let __records: SkipList<Record> = new SkipList<Record>()
+    inherit SkipList<Record>()
