@@ -1,6 +1,8 @@
 /.vscode
 /.idea
 /.ionide
+/.VSCodeCounter
+
 bin/
 obj/
 
