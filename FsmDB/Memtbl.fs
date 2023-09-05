@@ -28,21 +28,24 @@ module FsmDB.Memtbl
 open SkipList
 open System
 
-/// Single Record in the MemTable.
+/// Single Record in the Memtbl
 /// Each records holds the key and the position of the record in the Value log. *)
 type Record =
     {
         /// The key of the record
-        key: string
+        Key: string
 
         /// The location of the value in the ValueLog
-        value_loc: int64
+        ValueLoc: int64
     }
 
     interface Collections.Generic.IComparer<Record> with
-        member this.Compare(x: Record, y: Record) : int = x.key.CompareTo(y)
+        member this.Compare(x: Record, y: Record) : int = x.Key.CompareTo(y)
 
-    static member private Compare() = ()
+    /// +----------------------------------+
+    /// | this.Key.Length (int) | this.Key |
+    /// +----------------------------------+
+    member public this.Size = 4 + this.Key.Length
 
 /// In-memory table of the database.
 /// In-memory table of the records that have been modified most recently. At any given
