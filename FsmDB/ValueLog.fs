@@ -36,41 +36,50 @@ open System
 ///
 /// The ValueLog entries also hold a copy of the key to speed up the garbage collection
 /// procces.
-type ValueLog =
-    {
-        /// The file that the values are written to.
-        mutable File: IO.FileStream
+///
+/// Creates a new ValueLog or loads an existing one from disk.
+/// If the ValueLog file already exists, this function will only open the file without
+/// scanning it. This function doesn't check if file has been corrupted.
+type ValueLog(initPath: string, initHead: uint32, initTail: uint32) =
+    let mutable __disposed = false
 
-        /// The head of the ValueLog. This is where the next value will be written.
-        mutable Head: uint32
+    /// The file that the values are written to.
+    let __file: IO.FileStream =
+        if IO.File.Exists(initPath) then
+            new IO.FileStream(initPath, IO.FileMode.Open, IO.FileAccess.Read)
+        else
+            new IO.FileStream(initPath, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
 
-        /// The tail of the ValueLog. This is the position of the oldest write that hasn't been overwritten or deleted.
-        mutable Tail: uint32
-    }
+    /// The head of the ValueLog. This is where the next value will be written.
+    let mutable __head = initHead
 
-    /// Creates a new ValueLog or loads an existing one from disk.
-    /// If the ValueLog file already exists, this function will only open the file without
-    /// scanning it. This function doesn't check if file has been corrupted.
-    static member public Load(path: string, head: uint32, tail: uint32) : ValueLog =
-        use File =
-            if IO.File.Exists(path) then
-                new IO.FileStream(path, IO.FileMode.Open, IO.FileAccess.Read)
-            else
-                new IO.FileStream(path, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
+    /// The tail of the ValueLog. This is the position of the oldest write that hasn't been overwritten or deleted.
+    let __tail: uint32 = initTail
 
-        { File = File
-          Head = head
-          Tail = tail }
+    member this.Head
+        with get () = __head
+        and set (newHead: uint32) = __head <- newHead
 
-    /// Since the IO.FileStream initialized in `Load()` does not automatically release the file descriptor,
-    /// ValueLog needs to manually call this function to release related resources.
-    member public this.Free() : unit = this.File.Close()
+    member this.File = __file
+    member this.Tail = __tail
+
+    /// Since the IO.FileStream initialized does not automatically close,
+    /// ValueLog needs to call this function to release related resources.
+    member private this.Dispose(disposing: bool) : unit =
+        if not __disposed then
+            if disposing then
+                __file.Close()
+                ()
+
+            __disposed <- true
+
+    override this.Finalize() : unit = this.Dispose(false)
 
     /// Appends a new key-value pair to the ValueLog.
     /// In the event that the write was unsuccessful, the ValueLog won't shift the head forward.
     /// Therefore, writes can be retried without the risk of polluting the ValueLog or corrupting past entries.
     member public this.Append(key: string, value: string) : uint32 =
-        this.File.Seek(this.Head |> int64, IO.SeekOrigin.Begin) |> ignore
+        __file.Seek(this.Head |> int64, IO.SeekOrigin.Begin) |> ignore
 
         use writer = new IO.BinaryWriter(this.File)
         writer.Write(key.Length |> uint64 |> BitConverter.GetBytes)
@@ -79,12 +88,12 @@ type ValueLog =
         writer.Write(value)
 
         let pos = this.Head
-        this.Head <- this.Head + 8u + 8u + ((key.Length + value.Length |> uint32))
+        __head <- __head + 8u + 8u + ((key.Length + value.Length |> uint32))
         pos
 
     /// Fetches a value from the ValueLog at a given position.
     member public this.Fetch(loc: int64) : string =
-        this.File.Seek(loc, IO.SeekOrigin.Begin) |> ignore
+        __file.Seek(loc, IO.SeekOrigin.Begin) |> ignore
 
         use reader = new IO.BinaryReader(this.File)
         let keyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64 |> int
@@ -97,4 +106,4 @@ type ValueLog =
     /// Syncs the ValueLog to the disk.
     /// This function forcefully flushes the changes to the ValueLog to disk. Use this function
     /// sparingly as is will heavily reduce the write throughput of the ValueLog.
-    member public this.Sync() = this.File.Flush(true)
+    member public this.Sync() = __file.Flush(true)
