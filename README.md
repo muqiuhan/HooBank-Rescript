@@ -14,7 +14,7 @@ __WIP: This project is developed in [The X-Files Research Institute](https://git
 </div>
 
 ## Introduction
-WiscKey is a persistent LSM-tree-based key-value store with a performance-oriented data layout that separates keys from values to minimize I/O amplifi- cation. The design of WiscKey is highly SSD optimized, leveraging both the sequential and random performance characteristics of the device. 
+WiscKey is a persistent LSM-tree-based key-value store with a performance-oriented data layout that separates keys from values to minimize I/O amplification. The design of WiscKey is highly SSD optimized, leveraging both the sequential and random performance characteristics of the device. 
 
 - original paper: [https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
 
