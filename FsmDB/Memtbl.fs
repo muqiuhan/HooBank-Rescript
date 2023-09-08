@@ -45,7 +45,7 @@ type Record =
     /// +----------------------------------+
     /// | this.Key.Length (int) | this.Key |
     /// +----------------------------------+
-    member public this.Size : int = 4 + this.Key.Length
+    member public this.Size: int = 4 + this.Key.Length
 
 /// In-memory table of the database.
 /// In-memory table of the records that have been modified most recently. At any given
