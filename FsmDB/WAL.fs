@@ -70,7 +70,7 @@ type WAL(initPath: string) =
     /// Appends a new Memtbl operation to the WAL
     /// For sets, the `ValueLoc` should be the position in the ValueLog that the value entry
     /// was written to. For deletes, `ValueLoc` should be -1 to indicate a tombstone.
-    member public this.Add(record: Record) : unit =
+    member public this.Add(record: MemtblRecord) : unit =
         let writer = new IO.BinaryWriter(__file)
         writer.Write(record.Key.Length |> uint64 |> BitConverter.GetBytes)
         writer.Write(record.ValueLoc |> int64 |> BitConverter.GetBytes)

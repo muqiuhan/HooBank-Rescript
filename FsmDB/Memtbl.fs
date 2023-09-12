@@ -30,7 +30,7 @@ open System
 
 /// Single Record in the Memtbl
 /// Each records holds the key and the position of the record in the Value log. *)
-type Record =
+type MemtblRecord =
     {
         /// The key of the record
         Key: string
@@ -39,8 +39,8 @@ type Record =
         ValueLoc: int64
     }
 
-    interface Collections.Generic.IComparer<Record> with
-        member this.Compare(x: Record, y: Record) : int = x.Key.CompareTo(y)
+    interface Collections.Generic.IComparer<MemtblRecord> with
+        member this.Compare(x: MemtblRecord, y: MemtblRecord) : int = x.Key.CompareTo(y)
 
     /// +----------------------------------+
     /// | this.Key.Length (int) | this.Key |
@@ -52,4 +52,4 @@ type Record =
 /// time, there is only one active MemTable in the database engine. The MemTable is always
 /// the first store to be searched when a key-value pair is requested. *)
 type Memtbl() =
-    inherit SkipList<Record>()
+    inherit SkipList<MemtblRecord>()

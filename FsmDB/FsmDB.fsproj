@@ -9,6 +9,7 @@
     <Compile Include="ValueLog.fs" />
     <Compile Include="Memtbl.fs" />
     <Compile Include="WAL.fs" />
+    <Compile Include="SSTable.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="libs\SkipList\SkipList.csproj" />
