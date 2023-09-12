@@ -27,6 +27,7 @@
 module FsmDB.SSTable
 
 open System
+open Memtbl
 
 /// Single Record in a SSTable.
 /// Each SSTableRecord holds the key and the position of the record in the ValueLog.
@@ -55,8 +56,9 @@ type SSTable(initPath: string) =
     /// Path of the SSTable on-disk.
     let __path: string = initPath
 
-    /// Creation timestamp in microseconds.
-    let (__timestamp, __level): uint64 * uint64 = SSTable.ParseTimestampAndLevel(__path)
+    /// Creation timestamp in microseconds and Compress level
+    let (__timestamp, __level): uint64 * uint64 =
+        SSTable.ParseTimestampAndLevel(initPath)
 
     /// File that the keys reside on.
     let __file: IO.FileStream =
@@ -99,6 +101,22 @@ type SSTable(initPath: string) =
         __file.Seek(__records[__records.Count - 1], IO.SeekOrigin.Begin) |> ignore
         __high_key <- reader.ReadBytes(hightKeyLength |> int) |> Text.Encoding.UTF8.GetString
 
+    /// Creates a new SSTable from a full Memtbl.
+    /// This consturctor will create a new SSTable at a path.
+    /// If a file already exists at this path, then the file will be overwritten.
+    /// The MemTable will not be freed after creating a new SSTable. The caller is responsible for freeing the MemTable.
+    new(initPath: string, memtbl: Memtbl) =
+        let writer =
+            new IO.BinaryWriter(new IO.FileStream(initPath, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite))
+
+        for record in memtbl do
+            writer.Write(record.Key.Length |> uint64 |> BitConverter.GetBytes)
+            writer.Write(record.ValueLoc |> BitConverter.GetBytes)
+            writer.Write(record.Key |> Text.Encoding.UTF8.GetBytes)
+
+        writer.Close()
+        new SSTable(initPath)
+
     interface IDisposable with
         member this.Dispose() = __file.Close()
 
@@ -108,3 +126,84 @@ type SSTable(initPath: string) =
         let regex = Text.RegularExpressions.Regex(@"(\d+)-(\d+)\.sstable")
         let matched = regex.Match(filename)
         (matched.Groups.[1].Value |> uint64, matched.Groups.[2].Value |> uint64)
+
+    member private this.ReadRecord(offset: int64) =
+        __file.Seek(offset, IO.SeekOrigin.Begin) |> ignore
+
+        let reader = new IO.BinaryReader(__file)
+        let keyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
+        let valueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
+        let key = reader.ReadBytes(keyLength |> int) |> Text.Encoding.UTF8.GetString
+
+        { Key = key; ValueLoc = valueLoc }
+
+    /// Gets the location of a value on the ValueLog from a key.
+    /// This function uses the in-memory index to seek each record on disk.
+    /// This function uses binary search for a runtime of `O(log(n))` seeks.
+    member public this.GetValueLoc(key: string) =
+        let a = ref 0
+        let b = ref (__size - 1)
+
+        let rec binarySearchKey () =
+            if a < b then
+                let m = a.Value + (b.Value - a.Value) / 2
+                let record = this.ReadRecord(m)
+
+                match record.Key.CompareTo(key) with
+                | 0 -> Some(record.ValueLoc)
+                | -1 ->
+                    b.Value <- m - 1
+                    binarySearchKey ()
+                | 1 ->
+                    a.Value <- m + 1
+                    binarySearchKey ()
+                | _ -> failwith "?"
+            else
+                None
+
+        match binarySearchKey () with
+        | Some valueLoc -> valueLoc
+        | None ->
+            let record = this.ReadRecord(a.Value)
+
+            if record.Key.CompareTo(key) = 0 then
+                record.ValueLoc
+            else
+                failwith "SSTable: Key {key} not found!"
+
+    /// Checks if the given key could be in this SSTable.
+    /// This function runs in constant time without any operations on disk.
+    member public this.InKeyRange(key: string) =
+        let lowLen =
+            if __low_key.Length < key.Length then
+                __low_key.Length
+            else
+                key.Length
+
+        let cmp = key.CompareTo(__low_key)
+        let lowKeyCmp = ref 0
+        let highKeyCmp = ref 0
+
+        if cmp <> 0 || __low_key.Length = key.Length then
+            lowKeyCmp.Value <- cmp
+        else
+            lowKeyCmp.Value <- if key.Length < __low_key.Length then -1 else 1
+
+
+        let highLen =
+            if __high_key.Length < key.Length then
+                __high_key.Length
+            else
+                key.Length
+
+        let cmp = key.CompareTo(__high_key)
+
+        if cmp <> 0 || __low_key.Length = key.Length then
+            highKeyCmp.Value <- cmp
+        else
+            highKeyCmp.Value <- if key.Length < __high_key.Length then -1 else 1
+
+        if lowKeyCmp.Value >= 0 && highKeyCmp.Value <= 0 then
+            true
+        else
+            false
