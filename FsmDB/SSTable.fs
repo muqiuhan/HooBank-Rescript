@@ -43,16 +43,13 @@ type SSTableRecord =
     interface Collections.Generic.IComparer<SSTableRecord> with
         member this.Compare(x: SSTableRecord, y: SSTableRecord) : int = x.Key.CompareTo(y)
 
-    /// +----------------------------------+
-    /// | this.Key.Length (int) | this.Key |
-    /// +----------------------------------+
-    member public this.Size: int = 4 + this.Key.Length
+    member public this.Size: int = 8 + 8 + this.Key.Length
 
 /// On-disk String-Sorted Table(SSTable) of the keys.
 /// On-disk storage of the keys and their value locations. Records in a SSTable are sorted
 /// by their key as to support binary search. If a record isn't found in the MemTable, then
 /// the database searches the SSTables starting with the lowest one in the hierarchy.
-type SSTable(initPath: string) =
+type SSTable(initPath: string) as self =
     /// Path of the SSTable on-disk.
     let __path: string = initPath
 
@@ -79,27 +76,34 @@ type SSTable(initPath: string) =
 
     do
         let reader = new IO.BinaryReader(__file)
-        let offset = ref 0L
-
-        while true do
-            if -1 = reader.PeekChar() then
-                ()
-            else
-                let keyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
-                let next = (keyLength |> int64) + 8L
-                __file.Seek(next |> int64, IO.SeekOrigin.Current) |> ignore
-                __records.Add(offset.Value) |> ignore
-                offset.Value <- (offset.Value + next + 8L)
+        self.InitRecords(reader, 0L)
 
         __file.Seek(__records[0], IO.SeekOrigin.Begin) |> ignore
         let lowKeyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
         let valueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
-        __low_key <- reader.ReadBytes(lowKeyLength |> int) |> Text.Encoding.UTF8.GetString
+        __low_key <- reader.ReadBytes(lowKeyLength |> int) |> Text.Encoding.ASCII.GetString
 
         let hightKeyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
         let valueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
         __file.Seek(__records[__records.Count - 1], IO.SeekOrigin.Begin) |> ignore
-        __high_key <- reader.ReadBytes(hightKeyLength |> int) |> Text.Encoding.UTF8.GetString
+        __high_key <- reader.ReadBytes(hightKeyLength |> int) |> Text.Encoding.ASCII.GetString
+
+    let c = ref 0
+    member private this.InitRecords(reader: IO.BinaryReader, offset: int64) =
+        if -1 = reader.PeekChar() then
+            printfn $"c = {c}"
+        else
+            c.Value <- c.Value + 1
+            __records.Add(offset) |> ignore
+            let keyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64 |> int64
+            let next = keyLength + 8L
+            __file.Seek(next |> int64, IO.SeekOrigin.Current) |> ignore
+            printfn $"key len = {keyLength}"
+            this.InitRecords(reader, (offset + next))
+
+    member public this.Size = __records.Count
+    member public this.HighKey = __high_key
+    member public this.LowKey = __low_key
 
     /// Creates a new SSTable from a full Memtbl.
     /// This consturctor will create a new SSTable at a path.
@@ -112,9 +116,9 @@ type SSTable(initPath: string) =
         for record in memtbl do
             writer.Write(record.Key.Length |> uint64 |> BitConverter.GetBytes)
             writer.Write(record.ValueLoc |> BitConverter.GetBytes)
-            writer.Write(record.Key |> Text.Encoding.UTF8.GetBytes)
+            writer.Write(record.Key |> Text.Encoding.ASCII.GetBytes)
 
-        writer.Close()
+        writer.Dispose()
         new SSTable(initPath)
 
     interface IDisposable with
@@ -122,7 +126,7 @@ type SSTable(initPath: string) =
 
     /// Parses the creation timestamp and compaction level in microseconds from a SSTable filename.
     /// This function expects the filename in the format of `%ll-%ll.sstable`
-    static public ParseTimestampAndLevel(filename: string) : uint64 * uint64 = 
+    static member public ParseTimestampAndLevel(filename: string) : uint64 * uint64 =
         let regex = Text.RegularExpressions.Regex(@"(\d+)-(\d+)\.sstable")
         let matched = regex.Match(filename)
         (matched.Groups.[1].Value |> uint64, matched.Groups.[2].Value |> uint64)
@@ -133,7 +137,7 @@ type SSTable(initPath: string) =
         let reader = new IO.BinaryReader(__file)
         let keyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
         let valueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
-        let key = reader.ReadBytes(keyLength |> int) |> Text.Encoding.UTF8.GetString
+        let key = reader.ReadBytes(keyLength |> int) |> Text.Encoding.ASCII.GetString
 
         { Key = key; ValueLoc = valueLoc }
 

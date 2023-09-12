@@ -60,7 +60,7 @@ type WAL(initPath: string) =
             else
                 let walKeyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
                 let walValueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
-                let walKey = reader.ReadBytes(walKeyLength |> int) |> Text.Encoding.UTF8.GetString
+                let walKey = reader.ReadBytes(walKeyLength |> int) |> Text.Encoding.ASCII.GetString
 
                 if -1L = walValueLoc then
                     memtbl.Remove({ Key = walKey; ValueLoc = walValueLoc }) |> ignore
@@ -74,7 +74,7 @@ type WAL(initPath: string) =
         let writer = new IO.BinaryWriter(__file)
         writer.Write(record.Key.Length |> uint64 |> BitConverter.GetBytes)
         writer.Write(record.ValueLoc |> int64 |> BitConverter.GetBytes)
-        writer.Write(record.Key |> Text.Encoding.UTF8.GetBytes)
+        writer.Write(record.Key |> Text.Encoding.ASCII.GetBytes)
 
     /// Syncs the WAl to the disk.
     ///  This function forcefully flushes the changes to the WAL to disk. Use this function

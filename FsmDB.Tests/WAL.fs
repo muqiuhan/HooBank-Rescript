@@ -27,6 +27,6 @@ let ``Append to WAL`` () =
 
     Assert.AreEqual(keyLength, key.Length)
     Assert.AreEqual(valueLoc, valueLoc)
-    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.UTF8.GetString)
+    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.ASCII.GetString)
 
     IO.File.Delete("wal.data")
