@@ -35,7 +35,7 @@ open Memtbl
 type WAL(initPath: string) =
     let __file: IO.FileStream =
         //  If a WAL already exists at this path, the file will not be overwritten.
-        new IO.FileStream(initPath, IO.FileMode.Open, IO.FileAccess.ReadWrite)
+        new IO.FileStream(initPath, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite)
 
     let __path: string = initPath
 
