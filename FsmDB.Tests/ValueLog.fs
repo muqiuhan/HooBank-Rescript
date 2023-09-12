@@ -22,26 +22,38 @@
  * SOFTWARE.
  *)
 
-module FsmDB.Tests.Memtbl
+module FsmDB.Tests.ValueLog
 
-open FsmDB.Memtbl
+open FsmDB.ValueLog
 open NUnit.Framework
+open System
 
-[<TestFixture>]
-type TestMemtbl() =
+[<Test>]
+let ``Initialize ValueLog`` () =
+    let log = new ValueLog("value_log.data", 0u, 128u)
+    Assert.AreEqual(0u, log.Head)
+    Assert.AreEqual(128u, log.Tail)
 
-    [<Test>]
-    static member ``Test Memtbl set start``() =
-        let memtbl = new Memtbl()
-        let record1 = { Key = "lime"; ValueLoc = 0 }
-        let record2 = { Key = "cherry"; ValueLoc = 0 }
-        let record3 = { Key = "lime"; ValueLoc = 0 }
-        memtbl.Add(record1)
+    IO.File.Delete("value_log.data")
 
-        Assert.AreEqual(1, memtbl.Count)
-        Assert.AreEqual(record1, memtbl.GetFirst())
+[<Test>]
+let ``Append to ValueLog`` () =
+    let log = new ValueLog("value_log.data", 0u, 128u)
+    let key = "apple"
+    let value = "Apple Pie"
+    let pos = log.Append(key, value)
+    log.Sync()
+    Assert.AreEqual(0, pos)
 
-        memtbl.Add(record2)
-        Assert.AreEqual(2, memtbl.Count)
-        Assert.AreEqual(record2, memtbl.GetFirst())
-        Assert.AreEqual(record1, memtbl.GetLast())
+    use file =
+        new IO.BinaryReader(new IO.FileStream("value_log.data", IO.FileMode.Open, IO.FileAccess.Read))
+
+    let keyLength = file.ReadBytes(8) |> BitConverter.ToUInt64
+    let valueLength = file.ReadBytes(8) |> BitConverter.ToUInt64
+
+    Assert.AreEqual(keyLength, key.Length)
+    Assert.AreEqual(valueLength, value.Length)
+    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.UTF8.GetString)
+    Assert.AreEqual(value, file.ReadBytes(valueLength |> int) |> Text.Encoding.UTF8.GetString)
+
+    IO.File.Delete("value_log.data")
