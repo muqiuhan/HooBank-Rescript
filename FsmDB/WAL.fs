@@ -60,21 +60,21 @@ type WAL(initPath: string) =
             else
                 let walKeyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
                 let walValueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
-                let walKey = reader.ReadBytes(walKeyLength |> int) |> Text.Encoding.ASCII.GetString
+                let walKey = reader.ReadBytes(walKeyLength |> int) |> Text.Encoding.UTF8.GetString
 
                 if -1L = walValueLoc then
-                    memtbl.Remove({ Key = walKey; ValueLoc = walValueLoc }) |> ignore
+                    memtbl.Remove(MemtblRecord(walKey, walValueLoc)) |> ignore
                 else
-                    memtbl.Add({ Key = walKey; ValueLoc = walValueLoc })
+                    memtbl.Add(MemtblRecord(walKey, walValueLoc))
 
     /// Appends a new Memtbl operation to the WAL
     /// For sets, the `ValueLoc` should be the position in the ValueLog that the value entry
     /// was written to. For deletes, `ValueLoc` should be -1 to indicate a tombstone.
     member public this.Add(record: MemtblRecord) : unit =
         let writer = new IO.BinaryWriter(__file)
-        writer.Write(record.Key.Length |> uint64 |> BitConverter.GetBytes)
+        writer.Write(record.KeyLength |> BitConverter.GetBytes)
         writer.Write(record.ValueLoc |> int64 |> BitConverter.GetBytes)
-        writer.Write(record.Key |> Text.Encoding.ASCII.GetBytes)
+        writer.Write(record.Key)
 
     /// Syncs the WAl to the disk.
     ///  This function forcefully flushes the changes to the WAL to disk. Use this function

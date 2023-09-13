@@ -28,22 +28,11 @@ module FsmDB.SSTable
 
 open System
 open Memtbl
+open Record
 
 /// Single Record in a SSTable.
 /// Each SSTableRecord holds the key and the position of the record in the ValueLog.
-type SSTableRecord =
-    {
-        /// The key of the record
-        Key: string
-
-        /// The location of the value in the ValueLog
-        ValueLoc: int64
-    }
-
-    interface Collections.Generic.IComparer<SSTableRecord> with
-        member this.Compare(x: SSTableRecord, y: SSTableRecord) : int = x.Key.CompareTo(y)
-
-    member public this.Size: int = 8 + 8 + this.Key.Length
+type SSTableRecord = Record
 
 /// On-disk String-Sorted Table(SSTable) of the keys.
 /// On-disk storage of the keys and their value locations. Records in a SSTable are sorted
@@ -76,30 +65,26 @@ type SSTable(initPath: string) as self =
 
     do
         let reader = new IO.BinaryReader(__file)
-        self.InitRecords(reader, 0L)
+        self.InitRecords(reader)
 
         __file.Seek(__records[0], IO.SeekOrigin.Begin) |> ignore
         let lowKeyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
         let valueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
-        __low_key <- reader.ReadBytes(lowKeyLength |> int) |> Text.Encoding.ASCII.GetString
+        __low_key <- reader.ReadBytes(lowKeyLength |> int) |> Text.Encoding.UTF8.GetString
 
-        let hightKeyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
+        let highKeyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
         let valueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
         __file.Seek(__records[__records.Count - 1], IO.SeekOrigin.Begin) |> ignore
-        __high_key <- reader.ReadBytes(hightKeyLength |> int) |> Text.Encoding.ASCII.GetString
+        __high_key <- reader.ReadBytes(highKeyLength |> int) |> Text.Encoding.UTF8.GetString
 
-    let c = ref 0
-    member private this.InitRecords(reader: IO.BinaryReader, offset: int64) =
-        if -1 = reader.PeekChar() then
-            printfn $"c = {c}"
-        else
-            c.Value <- c.Value + 1
-            __records.Add(offset) |> ignore
+    member private this.InitRecords(reader: IO.BinaryReader) =
+        let offset = ref 0L
+
+        while -1 <> reader.PeekChar() do
+            __records.Add(offset.Value)
             let keyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64 |> int64
             let next = keyLength + 8L
-            __file.Seek(next |> int64, IO.SeekOrigin.Current) |> ignore
-            printfn $"key len = {keyLength}"
-            this.InitRecords(reader, (offset + next))
+            offset.Value <- offset.Value + next
 
     member public this.Size = __records.Count
     member public this.HighKey = __high_key
@@ -114,11 +99,11 @@ type SSTable(initPath: string) as self =
             new IO.BinaryWriter(new IO.FileStream(initPath, IO.FileMode.OpenOrCreate, IO.FileAccess.ReadWrite))
 
         for record in memtbl do
-            writer.Write(record.Key.Length |> uint64 |> BitConverter.GetBytes)
+            printfn $"write key length: {record.Key |> Array.length}"
+            writer.Write(record.Key.Length |> BitConverter.GetBytes)
             writer.Write(record.ValueLoc |> BitConverter.GetBytes)
-            writer.Write(record.Key |> Text.Encoding.ASCII.GetBytes)
+            writer.Write(record.Key)
 
-        writer.Dispose()
         new SSTable(initPath)
 
     interface IDisposable with
@@ -137,9 +122,9 @@ type SSTable(initPath: string) as self =
         let reader = new IO.BinaryReader(__file)
         let keyLength = reader.ReadBytes(8) |> BitConverter.ToUInt64
         let valueLoc = reader.ReadBytes(8) |> BitConverter.ToInt64
-        let key = reader.ReadBytes(keyLength |> int) |> Text.Encoding.ASCII.GetString
+        let key = reader.ReadBytes(keyLength |> int) |> Text.Encoding.UTF8.GetString
 
-        { Key = key; ValueLoc = valueLoc }
+        SSTableRecord(key, valueLoc)
 
     /// Gets the location of a value on the ValueLog from a key.
     /// This function uses the in-memory index to seek each record on disk.
@@ -153,7 +138,7 @@ type SSTable(initPath: string) as self =
                 let m = a.Value + (b.Value - a.Value) / 2
                 let record = this.ReadRecord(m)
 
-                match record.Key.CompareTo(key) with
+                match record.Compare(key) with
                 | 0 -> Some(record.ValueLoc)
                 | -1 ->
                     b.Value <- m - 1
@@ -170,7 +155,7 @@ type SSTable(initPath: string) as self =
         | None ->
             let record = this.ReadRecord(a.Value)
 
-            if record.Key.CompareTo(key) = 0 then
+            if record.Compare(key) = 0 then
                 record.ValueLoc
             else
                 failwith "SSTable: Key {key} not found!"
@@ -178,12 +163,6 @@ type SSTable(initPath: string) as self =
     /// Checks if the given key could be in this SSTable.
     /// This function runs in constant time without any operations on disk.
     member public this.InKeyRange(key: string) =
-        let lowLen =
-            if __low_key.Length < key.Length then
-                __low_key.Length
-            else
-                key.Length
-
         let cmp = key.CompareTo(__low_key)
         let lowKeyCmp = ref 0
         let highKeyCmp = ref 0
@@ -193,12 +172,6 @@ type SSTable(initPath: string) as self =
         else
             lowKeyCmp.Value <- if key.Length < __low_key.Length then -1 else 1
 
-
-        let highLen =
-            if __high_key.Length < key.Length then
-                __high_key.Length
-            else
-                key.Length
 
         let cmp = key.CompareTo(__high_key)
 

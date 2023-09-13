@@ -53,7 +53,7 @@ let ``Append to ValueLog`` () =
 
     Assert.AreEqual(keyLength, key.Length)
     Assert.AreEqual(valueLength, value.Length)
-    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.ASCII.GetString)
-    Assert.AreEqual(value, file.ReadBytes(valueLength |> int) |> Text.Encoding.ASCII.GetString)
+    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.UTF8.GetString)
+    Assert.AreEqual(value, file.ReadBytes(valueLength |> int) |> Text.Encoding.UTF8.GetString)
 
     IO.File.Delete("value_log.data")

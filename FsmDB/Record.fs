@@ -22,20 +22,25 @@
  * SOFTWARE.
  *)
 
-/// In-memory table of the records that have been modified most recently.
-module FsmDB.Memtbl
+module FsmDB.Record
 
-open SkipList
 open System
-open Record
+open SkipList
 
-/// Single Record in the Memtbl
-/// Each records holds the key and the position of the record in the Value log. *)
-type MemtblRecord = Record
+type Record(key: string, valueLoc: int64) =
 
-/// In-memory table of the database.
-/// In-memory table of the records that have been modified most recently. At any given
-/// time, there is only one active MemTable in the database engine. The MemTable is always
-/// the first store to be searched when a key-value pair is requested. *)
-type Memtbl() =
-    inherit SkipList<MemtblRecord>()
+    member public this.Key = key |> Text.Encoding.UTF8.GetBytes
+    member public this.KeyLength = this.Key.Length |> uint64
+    member public this.ValueLoc = valueLoc
+
+    member this.Compare(y: string) : int =
+        Array.compareWith (fun (b1: byte) b2 -> b1.CompareTo(b2)) this.Key (y |> Text.Encoding.UTF8.GetBytes)
+
+    interface IComparable<Record> with
+        member this.CompareTo(y: Record) : int =
+            Array.compareWith (fun (b1: byte) b2 -> b1.CompareTo(b2)) this.Key y.Key
+
+    /// +----------------------------------------------------------------------+
+    /// | this.Key.Length (uint64) | this.ValueLoc (int64) | this.Key (string) |
+    /// +----------------------------------------------------------------------+
+    member public this.Size: int = 8 + 8 + this.Key.Length

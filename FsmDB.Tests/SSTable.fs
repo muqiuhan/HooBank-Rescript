@@ -14,11 +14,12 @@ let ``Initialize SSTable from Memtbl`` () =
 
     for i = 0 to memtblSize - 1 do
         memtbl.Add(
-            { Key =
+            MemtblRecord(
                 [| (i >>> 24) &&& 0xFF; (i >>> 16) &&& 0xFF; (i >>> 8) &&& 0xFF; i &&& 0xFF |]
                 |> Array.map byte
-                |> Text.Encoding.ASCII.GetString
-              ValueLoc = (i * 128) |> int64 }
+                |> Text.Encoding.UTF8.GetString,
+                (i * 128) |> int64
+            )
         )
 
     Assert.AreEqual(memtblSize, memtbl.Count)

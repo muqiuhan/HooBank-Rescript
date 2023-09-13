@@ -16,7 +16,7 @@ let ``Append to WAL`` () =
     let key = "apple"
     let value = "Apple Pie"
 
-    wal.Add({ Key = key; ValueLoc = 0 })
+    wal.Add(MemtblRecord(key, 0))
     wal.Sync()
 
     use file =
@@ -27,6 +27,6 @@ let ``Append to WAL`` () =
 
     Assert.AreEqual(keyLength, key.Length)
     Assert.AreEqual(valueLoc, valueLoc)
-    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.ASCII.GetString)
+    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.UTF8.GetString)
 
     IO.File.Delete("wal.data")

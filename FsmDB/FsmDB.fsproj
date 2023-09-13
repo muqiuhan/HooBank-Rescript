@@ -6,6 +6,7 @@
     <PublishAot>true</PublishAot>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Record.fs" />
     <Compile Include="ValueLog.fs" />
     <Compile Include="Memtbl.fs" />
     <Compile Include="WAL.fs" />
