@@ -22,34 +22,38 @@
  * SOFTWARE.
  *)
 
-/// In-memory table of the records that have been modified most recently.
-module FsmDB.Memtbl
+module FsmDB.Tests.ValueLog
 
-open SkipList
+open FsmDB.ValueLog
+open NUnit.Framework
 open System
 
-/// Single Record in the Memtbl
-/// Each records holds the key and the position of the record in the Value log. *)
-type MemtblRecord =
-    {
-        /// The key of the record
-        Key: string
+[<Test>]
+let ``Initialize ValueLog`` () =
+    let log = new ValueLog("value_log.data", 0u, 128u)
+    Assert.AreEqual(0u, log.Head)
+    Assert.AreEqual(128u, log.Tail)
 
-        /// The location of the value in the ValueLog
-        ValueLoc: int64
-    }
+    IO.File.Delete("value_log.data")
 
-    interface Collections.Generic.IComparer<MemtblRecord> with
-        member this.Compare(x: MemtblRecord, y: MemtblRecord) : int = x.Key.CompareTo(y)
+[<Test>]
+let ``Append to ValueLog`` () =
+    let log = new ValueLog("value_log.data", 0u, 128u)
+    let key = "apple"
+    let value = "Apple Pie"
+    let pos = log.Append(key, value)
+    log.Sync()
+    Assert.AreEqual(0, pos)
 
-    /// +----------------------------------+
-    /// | this.Key.Length (int) | this.Key |
-    /// +----------------------------------+
-    member public this.Size: int = 4 + this.Key.Length
+    use file =
+        new IO.BinaryReader(new IO.FileStream("value_log.data", IO.FileMode.Open, IO.FileAccess.Read))
 
-/// In-memory table of the database.
-/// In-memory table of the records that have been modified most recently. At any given
-/// time, there is only one active MemTable in the database engine. The MemTable is always
-/// the first store to be searched when a key-value pair is requested. *)
-type Memtbl() =
-    inherit SkipList<MemtblRecord>()
+    let keyLength = file.ReadBytes(8) |> BitConverter.ToUInt64
+    let valueLength = file.ReadBytes(8) |> BitConverter.ToUInt64
+
+    Assert.AreEqual(keyLength, key.Length)
+    Assert.AreEqual(valueLength, value.Length)
+    Assert.AreEqual(key, file.ReadBytes(keyLength |> int) |> Text.Encoding.ASCII.GetString)
+    Assert.AreEqual(value, file.ReadBytes(valueLength |> int) |> Text.Encoding.ASCII.GetString)
+
+    IO.File.Delete("value_log.data")

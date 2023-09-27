@@ -77,8 +77,8 @@ type ValueLog(initPath: string, initHead: uint32, initTail: uint32) =
         let writer = new IO.BinaryWriter(this.File)
         writer.Write(key.Length |> uint64 |> BitConverter.GetBytes)
         writer.Write(value.Length |> uint64 |> BitConverter.GetBytes)
-        writer.Write(key |> Text.Encoding.UTF8.GetBytes)
-        writer.Write(value |> Text.Encoding.UTF8.GetBytes)
+        writer.Write(key |> Text.Encoding.ASCII.GetBytes)
+        writer.Write(value |> Text.Encoding.ASCII.GetBytes)
 
         let pos = this.Head
         __head <- __head + 8u + 8u + ((key.Length + value.Length |> uint32))
@@ -94,7 +94,7 @@ type ValueLog(initPath: string, initHead: uint32, initTail: uint32) =
 
         // Ignore the key
         reader.ReadBytes(keyLength) |> ignore
-        reader.ReadBytes(valueLength) |> Text.Encoding.UTF8.GetString
+        reader.ReadBytes(valueLength) |> Text.Encoding.ASCII.GetString
 
     /// Syncs the ValueLog to the disk.
     /// This function forcefully flushes the changes to the ValueLog to disk. Use this function

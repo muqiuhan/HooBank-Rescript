@@ -22,34 +22,23 @@
  * SOFTWARE.
  *)
 
-/// In-memory table of the records that have been modified most recently.
-module FsmDB.Memtbl
+module FsmDB.Tests.Memtbl
 
-open SkipList
-open System
+open FsmDB.Memtbl
+open NUnit.Framework
 
-/// Single Record in the Memtbl
-/// Each records holds the key and the position of the record in the Value log. *)
-type MemtblRecord =
-    {
-        /// The key of the record
-        Key: string
+[<Test>]
+let ``Set start Memtbl`` () =
+    let memtbl = new Memtbl()
+    let record1 = { Key = "lime"; ValueLoc = 0 }
+    let record2 = { Key = "cherry"; ValueLoc = 0 }
+    let record3 = { Key = "lime"; ValueLoc = 0 }
+    memtbl.Add(record1)
 
-        /// The location of the value in the ValueLog
-        ValueLoc: int64
-    }
+    Assert.AreEqual(1, memtbl.Count)
+    Assert.AreEqual(record1, memtbl.GetFirst())
 
-    interface Collections.Generic.IComparer<MemtblRecord> with
-        member this.Compare(x: MemtblRecord, y: MemtblRecord) : int = x.Key.CompareTo(y)
-
-    /// +----------------------------------+
-    /// | this.Key.Length (int) | this.Key |
-    /// +----------------------------------+
-    member public this.Size: int = 4 + this.Key.Length
-
-/// In-memory table of the database.
-/// In-memory table of the records that have been modified most recently. At any given
-/// time, there is only one active MemTable in the database engine. The MemTable is always
-/// the first store to be searched when a key-value pair is requested. *)
-type Memtbl() =
-    inherit SkipList<MemtblRecord>()
+    memtbl.Add(record2)
+    Assert.AreEqual(2, memtbl.Count)
+    Assert.AreEqual(record2, memtbl.GetFirst())
+    Assert.AreEqual(record1, memtbl.GetLast())
