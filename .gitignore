@@ -1,11 +1,1 @@
-/.vscode
-/.idea
-/.ionide
-/.VSCodeCounter
-
-bin/
-obj/
-
-.fake
-
-FsmDB.sln.DotSettings.user
+/target

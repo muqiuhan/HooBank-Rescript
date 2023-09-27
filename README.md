@@ -2,16 +2,11 @@
 
 <img src="./.github/logo.png" height="150">
 
-# FsmDB
+# Suka
 
-*WiscKey based Key-Value Store implementation in F#*
+*WiscKey based Key-Value Store implementation in Rust*
 
-![](https://img.shields.io/badge/.NET%20Core%208.0.100~preview.7-8A2BE2)
-
-![](https://img.shields.io/badge/.NET%20Core%20Native%20AOT-8A2BE2)
-![](https://github.com/muqiuhan/FsmDB/actions/workflows/build.yml/badge.svg)
-
-__WIP: This project is developed in [The X-Files Research Institute](https://github.com/X-FRI/FsmDB)__
+__WIP: This project is developed in [The X-Files Research Institute](https://github.com/X-FRI/Suka)__
 
 </div>
 
@@ -20,14 +15,7 @@ WiscKey is a persistent LSM-tree-based key-value store with a performance-orient
 
 - original paper: [https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
 
-## Build and Test
 
-- Build: `dotnet build`
-- Publish: `dotnet publish -r [platform]`
-- Test: `dotnet test`
-
-## Dependencies
-- The implementation of SkipList uses [DataStructures/SkipList.cs](https://github.com/sphinxy/DataStructures/blob/master/DataStructures/SkipList.cs)
 
 ## Reference
 - [WiscKey original paper: Separating Keys from Values in SSD-Conscious Storage](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
