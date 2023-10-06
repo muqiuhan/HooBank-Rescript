@@ -4,20 +4,60 @@
 
 # Suka
 
-*WiscKey based Key-Value Store implementation in Rust*
+*WiscKey based Key-Value Store implementation in Scala*
 
 __WIP: This project is developed in [The X-Files Research Institute](https://github.com/X-FRI/Suka)__
 
+
+![Scala 3.3.0](https://img.shields.io/badge/Scala3.3.0-%23DC322F)
+![SBT 1.9.6](https://img.shields.io/badge/SBT1.9.6-%23380D09)
+
+![Build and Test](https://github.com/muqiuhan/Suka/actions/workflows/BuildAndTest.yaml/badge.svg)
+
 </div>
 
-## Introduction
+## Components
+
+- Cli
+- Query Parser
+- Query Engine
+- Storage Engine
+
+```
+     +-----+
+     | cli |
+     +-----+
+        |
+        v
+ +--------------+          +--------+
+ | Query Engine | <------> | Parser |
+ +--------------+          +--------+
+        |
+        v
++----------------+
+| Storage Engine |
++----------------+
+```
+
+## Parser
+Using the pre-compiled MySQL ANTLR parser from [Apache ShardingSphere](https://shardingsphere.apache.org/) to parse SQL, tokenize the inputs, create the domain object, and send it to the Query Engine. 
+
+Parser will supports:
+- SELECT
+- CREATE
+- INSERT
+- DELETE
+- UPDATE
+- DROP
+
+## Query Engine
+The query engine abstracts all the downstream interactions. Query Engine internally calls Parser to parse the SQL statements and convert it to Domain objects. The Domain Objects are then used by the Query Planner to create a query execution plan based on some rules or heuristics. The Query Plan is executed by the Execution Engine. The Execution engine talks to Storge Engine by scanning disk files and reading the table records. These records are then send back to Query Engine via Iterator Pattern. The Query Engine applies filters based on Selection and Projection Operators defined in the Query Plan and finally sends it back to the CLI for printing the table output.
+
+## Storage Engine
 WiscKey is a persistent LSM-tree-based key-value store with a performance-oriented data layout that separates keys from values to minimize I/O amplification. The design of WiscKey is highly SSD optimized, leveraging both the sequential and random performance characteristics of the device. 
 
-- original paper: [https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
-
-
-
-## Reference
+# Reference
+- [Apache ShardingSphere](https://shardingsphere.apache.org/)
 - [WiscKey original paper: Separating Keys from Values in SSD-Conscious Storage](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
 - [The Log-Structured Merge-Tree (LSM-Tree) original paper](https://www.cs.umb.edu/~poneil/lsmtree.pdf) 
 - [Introductory tutorial to designing and building a LSM-Tree based Key-Value Store like RocksDB](https://adambcomer.com/blog/simple-database/motivation-design/)
@@ -29,11 +69,12 @@ WiscKey is a persistent LSM-tree-based key-value store with a performance-orient
 - [RocksDB: Write Ahead Log](https://github.com/EighteenZi/rocksdb_wiki/blob/master/Write-Ahead-Log.md)
 - [RocksDB source code: A Persistent Key-Value Store for Flash and RAM Storage](https://github.com/facebook/rocksdb)
 - [WiscKey C implementation by @adambcomer](https://github.com/adambcomer/WiscKey)
+- [Build a tiny database in Java](https://medium.com/javarevisited/build-a-tiny-database-in-java-ca6d3f06e115)
 
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2022 Muqiu Han
+Copyright (c) 2023 Muqiu Han
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
