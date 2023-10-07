@@ -1,5 +1,6 @@
 package utils
 
+@deprecated
 object ArrayBinarySearch {
   def binarySearch[T](
       array: Array[T],

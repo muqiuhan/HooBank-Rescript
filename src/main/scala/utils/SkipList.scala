@@ -175,6 +175,7 @@ class TwoKeysMultiValuePairOrd[A1 <: Comparable[A1], A2 <: Comparable[
   }
 }
 
+@deprecated
 class SkipList[A <: Comparable[A]](implicit ord: A => Ordered[A]) {
 
   var FACTOR = 5

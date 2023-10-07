@@ -12,7 +12,7 @@ __WIP: This project is developed in [The X-Files Research Institute](https://git
 ![Scala 3.3.0](https://img.shields.io/badge/Scala3.3.0-%23DC322F)
 ![SBT 1.9.6](https://img.shields.io/badge/SBT1.9.6-%23380D09)
 
-![Build and Test](https://github.com/muqiuhan/Suka/actions/workflows/BuildAndTest.yaml/badge.svg)
+![Build and Test](https://github.com/x-fri/Suka/actions/workflows/BuildAndTest.yaml/badge.svg)
 
 </div>
 
