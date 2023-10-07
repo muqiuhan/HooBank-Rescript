@@ -4,7 +4,7 @@
 
 # Suka
 
-*WiscKey based Key-Value Store implementation in Scala*
+*WiscKey based Key-Value database implementation in Scala*
 
 __WIP: This project is developed in [The X-Files Research Institute](https://github.com/X-FRI/Suka)__
 
