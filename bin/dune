@@ -1,0 +1,4 @@
+(executable
+ (public_name suka)
+ (name suka)
+ (libraries suka_lib))

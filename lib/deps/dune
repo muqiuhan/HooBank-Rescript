@@ -1,0 +1,3 @@
+(library
+ (name deps)
+ (libraries core_kernel eio domainslib))

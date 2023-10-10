@@ -1,0 +1,8 @@
+lib: [
+  "_build/install/default/lib/suka/META"
+  "_build/install/default/lib/suka/dune-package"
+  "_build/install/default/lib/suka/opam"
+]
+bin: [
+  "_build/install/default/bin/suka"
+]
