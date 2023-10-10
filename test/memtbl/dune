@@ -1,0 +1,4 @@
+(library
+ (name test_memtbl) 
+ (preprocess (pps stdint-literals))
+ (libraries suka_lib alcotest core))

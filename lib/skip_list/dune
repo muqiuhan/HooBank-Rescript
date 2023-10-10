@@ -1,3 +1,5 @@
 (library
  (name skip_list)
- (libraries deps))
+ (flags
+  (-w -69))
+ (libraries core_kernel))

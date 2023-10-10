@@ -1,0 +1,5 @@
+(library
+ (name memtbl)
+ (preprocess (pps ppx_deriving.show ppx_sexp_conv))
+ (flags (-w -32))
+ (libraries skip_list core log stdint))
