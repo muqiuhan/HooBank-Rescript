@@ -1,5 +1,0 @@
-(library
- (name skip_list)
- (flags
-  (-w -69))
- (libraries core_kernel))

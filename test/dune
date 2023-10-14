@@ -1,3 +1,0 @@
-(test
- (name suka_test)
- (libraries alcotest test_memtbl))
