@@ -21,13 +21,13 @@
 
 <a href="https://react.dev/">
 
-<img src="./.github/react-1-logo-png-transparent.png" height="20px">
+<img src="./.github/react-1-logo-png-transparent.png" height="22px">
 
 - The library for web and native user interfaces
 
 <a href="https://tailwindcss.com/">
 
-<img src="./.github/tailwind-css.svg" height="20px">
+<img src="./.github/tailwind-css.svg" height="15px">
 
 - Rapidly build modern websites without ever leaving your HTML
 
