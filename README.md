@@ -50,6 +50,10 @@ Commands available via "pnpm run":
     vite preview
 ```
 
+## Reference
+- [Figma: HooBank](https://www.figma.com/file/bUGIPys15E78w9bs1l4tgS/HooBank)
+- [project_hookbank](https://github.com/adrianhajdin/project_hoobank)
+
 ## LICENSE
 The MIT License (MIT)
 
