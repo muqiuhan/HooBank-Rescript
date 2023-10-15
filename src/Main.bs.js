@@ -7,7 +7,7 @@ import * as Core__Option from "@rescript/core/src/Core__Option.bs.js";
 import * as Client from "react-dom/client";
 import * as JsxRuntime from "react/jsx-runtime";
 
-import './tailwind.css'
+import './index.css'
 ;
 
 Client.createRoot(Core__Option.getExn(Caml_option.nullable_to_opt(document.querySelector("#root")))).render(JsxRuntime.jsx(React.StrictMode, {
