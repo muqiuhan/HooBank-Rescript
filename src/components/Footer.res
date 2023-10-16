@@ -5,6 +5,14 @@ open Styles
 
 @react.component
 let make = () => {
+  let link_mb = (footerlink, index) => {
+    index != Array.length(footerlink["links"]) - 1 ? "mb-4" : "mb-0"
+  }
+
+  let social_mb = index => {
+    index != Array.length(socialMedia) - 1 ? "mr-6" : "mr-0"
+  }
+
   <section className={`${styles["flexCenter"]} ${styles["paddingY"]} flex-col`}>
     <div className={`${styles["flexStart"]} md:flex-row flex-col mb-8 w-full`}>
       <div className="flex-[1] flex flex-col justify-start mr-10">
@@ -23,10 +31,10 @@ let make = () => {
               {Array.mapWithIndex(footerlink["links"], (link, index) => {
                 <li
                   key={link["name"]}
-                  className={`font-poppins font-normal text-[16px] leading-[24px] text-dimWhite hover:text-secondary cursor-pointer ${index !=
-                      Array.length(footerlink["links"]) - 1
-                      ? "mb-4"
-                      : "mb-0"}`}>
+                  className={`${link_mb(
+                      footerlink,
+                      index,
+                    )} font-poppins font-normal text-[16px] leading-[24px] text-dimWhite hover:text-secondary cursor-pointer`}>
                   {link["name"]->React.string}
                 </li>
               })->React.array}
@@ -46,10 +54,7 @@ let make = () => {
             key={social["id"]}
             src={social["icon"]}
             alt={social["id"]}
-            className={`w-[21px] h-[21px] object-contain cursor-pointer ${index !==
-                Array.length(socialMedia) - 1
-                ? "mr-6"
-                : "mr-0"}`}
+            className={`${social_mb(index)} w-[21px] h-[21px] object-contain cursor-pointer`}
             // onClick={() => window.open(social.link)}
           />
         })->React.array}

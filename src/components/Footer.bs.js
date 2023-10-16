@@ -8,6 +8,20 @@ import LogoSvg from "../assets/logo.svg";
 var logo = LogoSvg;
 
 function Footer(props) {
+  var link_mb = function (footerlink, index) {
+    if (index !== (footerlink.links.length - 1 | 0)) {
+      return "mb-4";
+    } else {
+      return "mb-0";
+    }
+  };
+  var social_mb = function (index) {
+    if (index !== (Constants.socialMedia.length - 1 | 0)) {
+      return "mr-6";
+    } else {
+      return "mr-0";
+    }
+  };
   return JsxRuntime.jsxs("section", {
               children: [
                 JsxRuntime.jsxs("div", {
@@ -38,9 +52,7 @@ function Footer(props) {
                                                         children: footerlink.links.map(function (link, index) {
                                                               return JsxRuntime.jsx("li", {
                                                                           children: link.name,
-                                                                          className: "font-poppins font-normal text-[16px] leading-[24px] text-dimWhite hover:text-secondary cursor-pointer " + (
-                                                                            index !== (footerlink.links.length - 1 | 0) ? "mb-4" : "mb-0"
-                                                                          ) + ""
+                                                                          className: "" + link_mb(footerlink, index) + " font-poppins font-normal text-[16px] leading-[24px] text-dimWhite hover:text-secondary cursor-pointer"
                                                                         }, link.name);
                                                             }),
                                                         className: "list-none mt-4"
@@ -63,9 +75,7 @@ function Footer(props) {
                         JsxRuntime.jsx("div", {
                               children: Constants.socialMedia.map(function (social, index) {
                                     return JsxRuntime.jsx("img", {
-                                                className: "w-[21px] h-[21px] object-contain cursor-pointer " + (
-                                                  index !== (Constants.socialMedia.length - 1 | 0) ? "mr-6" : "mr-0"
-                                                ) + "",
+                                                className: "" + social_mb(index) + " w-[21px] h-[21px] object-contain cursor-pointer",
                                                 alt: social.id,
                                                 src: social.icon
                                               }, social.id);
