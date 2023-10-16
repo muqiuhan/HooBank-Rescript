@@ -50,6 +50,17 @@ Commands available via "pnpm run":
     vite preview
 ```
 
+## DEMO
+
+### Desktop
+![](./.github/desktop-demo.png)
+
+### PAD
+![](./.github/pad-demo.png)
+
+### Mobile
+![](./.github/mobile-demo.png)
+
 ## Reference
 - [Figma: HooBank](https://www.figma.com/file/bUGIPys15E78w9bs1l4tgS/HooBank)
 - [project_hookbank](https://github.com/adrianhajdin/project_hoobank)
