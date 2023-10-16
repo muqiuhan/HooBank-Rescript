@@ -4,7 +4,7 @@ import * as Styles from "../Styles.bs.js";
 import * as Constants from "../Constants.bs.js";
 import * as JsxRuntime from "react/jsx-runtime";
 
-var stats = Constants.stats.map(function (stat) {
+var stats = Constants.stats.map(function (stat, _index) {
       return JsxRuntime.jsxs("div", {
                   children: [
                     JsxRuntime.jsx("h4", {
