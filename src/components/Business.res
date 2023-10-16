@@ -24,7 +24,7 @@ module FeatureCard = {
 
 @react.component
 let make = () => {
-  <section>
+  <section className=`${layout["section"]}`>
     <div className={`${layout["sectionInfo"]}`}>
       <h2 className={`${styles["heading2"]}`}>
         {"You do the business, "->React.string}

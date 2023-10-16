@@ -77,7 +77,10 @@ function Footer(props) {
                                     return JsxRuntime.jsx("img", {
                                                 className: "" + social_mb(index) + " w-[21px] h-[21px] object-contain cursor-pointer",
                                                 alt: social.id,
-                                                src: social.icon
+                                                src: social.icon,
+                                                onClick: (function (_event) {
+                                                    document.location.href = social.link;
+                                                  })
                                               }, social.id);
                                   }),
                               className: "flex flex-row md:mt-0 mt-6"

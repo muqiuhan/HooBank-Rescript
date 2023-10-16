@@ -2,6 +2,7 @@ open Constants
 open Styles
 
 @module("../assets/logo.svg") external logo: string = "default"
+@val external document: 'a = "document"
 
 @react.component
 let make = () => {
@@ -55,7 +56,7 @@ let make = () => {
             src={social["icon"]}
             alt={social["id"]}
             className={`${social_mb(index)} w-[21px] h-[21px] object-contain cursor-pointer`}
-            // onClick={() => window.open(social.link)}
+            onClick={_event => {document["location"]["href"] = social["link"]}}
           />
         })->React.array}
       </div>

@@ -74,7 +74,8 @@ function Business(props) {
                           }),
                       className: "" + Styles.layout.sectionImg + " flex-col"
                     })
-              ]
+              ],
+              className: "" + Styles.layout.section + ""
             });
 }
 
