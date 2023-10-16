@@ -17,7 +17,7 @@ function GetStarted(props) {
                                           children: "Get",
                                           className: "text-gradient"
                                         }),
-                                    className: "font-poppins font-medium text-[18px] leading-[23.4px]"
+                                    className: "font-poppins font-medium mr-2 text-[18px] leading-[23.4px]"
                                   }),
                               JsxRuntime.jsx("img", {
                                     className: "w-[23px] h-[23px] object-contain",
@@ -37,7 +37,7 @@ function GetStarted(props) {
                     ],
                     className: "" + Styles.styles.flexCenter + " flex-col bg-primary w-[100%] h-[100%] rounded-full"
                   }),
-              className: "" + Styles.styles.flexCenter + " w-[140px] h-[140px] rounded-full bg-blue-gradient p-[2px] cursor-pointer"
+              className: "" + Styles.styles.flexCenter + " animate-bounce  w-[140px] h-[140px] rounded-full bg-blue-gradient p-[2px] cursor-pointer"
             });
 }
 
