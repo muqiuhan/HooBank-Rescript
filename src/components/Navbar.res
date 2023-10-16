@@ -2,30 +2,31 @@
 @module("../assets/close.svg") external close_icon: string = "default"
 @module("../assets/menu.svg") external menu_icon: string = "default"
 
+let menu = mobile => {
+  let end_menu_item_margin = index => {
+    if mobile {
+      Array.length(Constants.navLinks) - 1 == index ? "mr-0" : "mb-4"
+    } else if Array.length(Constants.navLinks) - 1 == index {
+      "mr-0"
+    } else {
+      "mr-10"
+    }
+  }
+
+  Array.mapWithIndex(Constants.navLinks, (nav, index) => {
+    <li
+      key={`${nav["id"]}`}
+      className={`${end_menu_item_margin(
+          index,
+        )} font-poppins font-normal cursor-pointer text-[16px] text-white`}>
+      <a href={`${nav["id"]}`}> {nav["title"]->React.string} </a>
+    </li>
+  })->React.array
+}
+
 @react.component
 let make = () => {
   let (toggle, setToggle) = React.useState(() => false)
-
-  let menu = mobile => {
-    let end_menu_item_margin = index => {
-      if mobile {
-        Array.length(Constants.navLinks) - 1 == index ? "mr-0" : "mb-4"
-      } else  {
-        Array.length(Constants.navLinks) - 1 == index ? "mr-0" : "mr-10"
-      }
-    }
-
-    Array.mapWithIndex(Constants.navLinks, (nav, index) => {
-      <li
-        key={`${nav["id"]}`}
-        className={`${end_menu_item_margin(
-            index,
-          )} font-poppins font-normal cursor-pointer text-[16px] text-white`}>
-        <a href={`${nav["id"]}`}> {nav["title"]->React.string} </a>
-      </li>
-    })->React.array
-  }
-
   let mobile_menu_icon = toggle ? close_icon : menu_icon
   let mobile_menu_toggle = toggle ? "flex" : "hidden"
 
@@ -42,7 +43,7 @@ let make = () => {
       <div
         className={`${mobile_menu_toggle} p-6 bg-black-gradient absolute top-20 right-0 mx-4 my-2 min-w-[140px] rounded-xl sidebar`}>
         <ul className="list-none flex justify-end items-center flex-1 flex-col"> {menu(true)} </ul>
-        </div>
+      </div>
     </div>
   </nav>
 }

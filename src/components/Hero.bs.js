@@ -8,7 +8,7 @@ import DiscountSvg from "../assets/Discount.svg";
 
 var discount = DiscountSvg;
 
-var robot = RobotPng;
+var robot_image = RobotPng;
 
 function Hero(props) {
   return JsxRuntime.jsxs("section", {
@@ -78,16 +78,16 @@ function Hero(props) {
                         JsxRuntime.jsx("img", {
                               className: "w-[100%] h-[100%] relative z-[5]",
                               alt: "billing",
-                              src: robot
+                              src: robot_image
                             }),
                         JsxRuntime.jsx("div", {
-                              className: "absolute z-[0] w-[40%] h-[35%] top-0 pink__gradient"
+                              className: "animate-pulse absolute z-[0] w-[40%] h-[35%] top-0 pink__gradient"
                             }),
                         JsxRuntime.jsx("div", {
                               className: "absolute z-[1] w-[80%] h-[80%] rounded-full white__gradient bottom-40"
                             }),
                         JsxRuntime.jsx("div", {
-                              className: "absolute z-[0] w-[50%] h-[50%] right-20 bottom-20 blue__gradient"
+                              className: "animate-bounce absolute z-[0] w-[50%] h-[50%] right-20 blue__gradient"
                             })
                       ],
                       className: "flex-1 flex " + Styles.styles.flexCenter + " md:my-0 my-10 relative"
@@ -106,7 +106,7 @@ var make = Hero;
 
 export {
   discount ,
-  robot ,
+  robot_image ,
   make ,
 }
 /* discount Not a pure module */

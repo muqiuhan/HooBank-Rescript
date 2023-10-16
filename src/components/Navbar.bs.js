@@ -14,36 +14,37 @@ var close_icon = CloseSvg;
 
 var menu_icon = MenuSvg;
 
+function menu(mobile) {
+  var end_menu_item_margin = function (index) {
+    if (mobile) {
+      if ((Constants.navLinks.length - 1 | 0) === index) {
+        return "mr-0";
+      } else {
+        return "mb-4";
+      }
+    } else if ((Constants.navLinks.length - 1 | 0) === index) {
+      return "mr-0";
+    } else {
+      return "mr-10";
+    }
+  };
+  return Constants.navLinks.map(function (nav, index) {
+              return JsxRuntime.jsx("li", {
+                          children: JsxRuntime.jsx("a", {
+                                children: nav.title,
+                                href: "" + nav.id + ""
+                              }),
+                          className: "" + end_menu_item_margin(index) + " font-poppins font-normal cursor-pointer text-[16px] text-white"
+                        }, "" + nav.id + "");
+            });
+}
+
 function Navbar(props) {
   var match = React.useState(function () {
         return false;
       });
   var setToggle = match[1];
   var toggle = match[0];
-  var menu = function (mobile) {
-    var end_menu_item_margin = function (index) {
-      if (mobile) {
-        if ((Constants.navLinks.length - 1 | 0) === index) {
-          return "mr-0";
-        } else {
-          return "mb-4";
-        }
-      } else if ((Constants.navLinks.length - 1 | 0) === index) {
-        return "mr-0";
-      } else {
-        return "mr-10";
-      }
-    };
-    return Constants.navLinks.map(function (nav, index) {
-                return JsxRuntime.jsx("li", {
-                            children: JsxRuntime.jsx("a", {
-                                  children: nav.title,
-                                  href: "" + nav.id + ""
-                                }),
-                            className: "" + end_menu_item_margin(index) + " font-poppins font-normal cursor-pointer text-[16px] text-white"
-                          }, "" + nav.id + "");
-              });
-  };
   var mobile_menu_icon = toggle ? close_icon : menu_icon;
   var mobile_menu_toggle = toggle ? "flex" : "hidden";
   return JsxRuntime.jsxs("nav", {
@@ -90,6 +91,7 @@ export {
   logo ,
   close_icon ,
   menu_icon ,
+  menu ,
   make ,
 }
 /* logo Not a pure module */
