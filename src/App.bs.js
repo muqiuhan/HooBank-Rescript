@@ -24,7 +24,7 @@ function App(props) {
                 JsxRuntime.jsx("div", {
                       children: JsxRuntime.jsx("div", {
                             children: JsxRuntime.jsx(Hero.make, {}),
-                            className: "{styles[\"boxWidth\"]}"
+                            className: "" + Styles.styles.boxWidth + ""
                           }),
                       className: "bg-primary " + Styles.styles.flexStart + ""
                     }),

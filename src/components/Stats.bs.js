@@ -16,7 +16,7 @@ var stats = Constants.stats.map(function (stat, _index) {
                           className: "font-poppins font-normal xs:text-[20px] text-[15px] xs:leading-[26px] leading-[21px] text-gradient ml-3 uppercase"
                         })
                   ],
-                  className: "bg-black-gradient p-6 rounded-xl flex-1 flex justify-start items-center flex-row m-3"
+                  className: "bg-black-gradient p-5 rounded-xl ml-10 flex-1 flex justify-start items-center flex-row m-3"
                 }, stat.id);
     });
 

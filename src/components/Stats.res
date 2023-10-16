@@ -2,9 +2,9 @@ open Constants
 open Styles
 
 let stats = Array.mapWithIndex(stats, (stat, _index) => {
-  let stats_bg = `bg-black-gradient p-6 rounded-xl`
+  let stats_bg = `bg-black-gradient p-5 rounded-xl`
   <div
-    key={stat["id"]} className={`${stats_bg} flex-1 flex justify-start items-center flex-row m-3`}>
+    key={stat["id"]} className={`${stats_bg} ml-10 flex-1 flex justify-start items-center flex-row m-3`}>
     <h4
       className="font-poppins font-semibold xs:text-[40px] text-[30px] xs:leading-[50px] leading-[43px] text-white">
       {stat["value"]->React.string}
